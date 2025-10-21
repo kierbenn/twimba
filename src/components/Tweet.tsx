@@ -1,34 +1,28 @@
-import type { TweetsData } from "../data"
+import type { TweetsData, Reply } from "../data"
 import TweetLiked from "./TweetLiked"
 import TweetShared from "./TweetShared"
 import { useState } from "react"
 
-type Reply = {
-  handle: string,
-  profilePic: string,
-  tweetText: string,
-}
-
 function Tweet({tweet, onAddReply}: {tweet: TweetsData, onAddReply:(tweetId:string, reply:Reply) => void}) {
-
+    // Toggle to show/hide the replies section
     const [isToggled, setIsToggled] = useState(false)
+    // hold user's reply
     const [reply, setReply] = useState('')
-    //const [replyTo, setReplyTo] = useState('')
-
-    //console.log(props, "alltweets")
 
     function handleToggle() {
         setIsToggled(prev => !prev)
     }
 
     function handleSubmit() {
+        // create reply obj
         const newReply = {
             handle: `@Scrimba 💎`,
             profilePic: `images/scrimbalogo.png`,
             tweetText: reply,
         }
-
+        // call parent func handleAddReply(tweetId:string, reply:Reply)
         onAddReply(tweet.uuid, newReply)
+        // clear reply text
         setReply('')
     }
 

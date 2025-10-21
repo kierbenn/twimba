@@ -2,6 +2,7 @@
 import { useState } from "react"
 
 function TweetShared(props:{retweets:number}) {
+    // click to share tweet, click again to not share
     const [isToggled, setIsToggled] = useState(false)
 
     function handleToggle() {

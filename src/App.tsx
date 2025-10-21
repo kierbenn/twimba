@@ -1,30 +1,21 @@
 
 import { useState } from 'react'
 import { tweetsData } from './data'
-import type { TweetsData } from './data'
+import type { TweetsData, Reply } from './data'
 import { v4 as uuidv4 } from 'uuid';
 import Tweet from './components/Tweet'
 import './App.css'
 
-type Reply = {
-  handle: string,
-  profilePic: string,
-  tweetText: string,
-}
-
 function App() {
-
-  const [tweet, setTweet] = useState('')
+  // initiate allTweets with tweetsData to populate component
   const [allTweets, setAllTweets] = useState(tweetsData)
-
-  function userTweet(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    setTweet(e.currentTarget.value)
-  }
+  // hold user's tweet
+  const [tweet, setTweet] = useState('')
 
   function submitTweet() {
-    
+    // return if empty
     if (!tweet) return
-
+    // setup tweet obj structure
     const newTweet = {
         handle: `@Scrimba 💎`,
         profilePic: `images/scrimbalogo.png`,
@@ -34,15 +25,18 @@ function App() {
         replies: [],
         isLiked: false,
         isRetweeted: false,
-        uuid: uuidv4(),
+        uuid: uuidv4(), // generate new uuid
     }
-
+    // add new tweet to front of tweets array
     setAllTweets(prev => [newTweet, ...prev])
+    // clear text
     setTweet('')
-    console.log(newTweet)
+    //console.log(newTweet)
   }
 
+  // Need to pass handleAddReply to Tweet Component
   const handleAddReply = (tweetId:string, reply:Reply) => {
+    // find matching uuid and add in reply obj
     setAllTweets(prev =>
       prev.map(tweet =>
         tweet.uuid === tweetId
@@ -64,7 +58,7 @@ function App() {
             placeholder="What's happening?"
             id="tweet-input"
             value={tweet}
-            onChange={userTweet}
+            onChange={e => setTweet(e.target.value)}
           ></textarea>
         </div>
         <button id="tweet-btn" onClick={submitTweet}>Tweet</button>

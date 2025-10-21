@@ -2,6 +2,7 @@
 import { useState } from "react"
 
 function TweetLiked(props:{likes:number}) {
+    // click to like tweet, click again to remove your like
     const [isToggled, setIsToggled] = useState(false)
 
     function handleToggle() {

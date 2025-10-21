@@ -1,15 +1,18 @@
 
+export type Reply = {
+  handle: string,
+  profilePic: string,
+  tweetText: string,
+}
+
+
 export type TweetsData = {
     handle: string,
     profilePic: string,
     likes: number,
     retweets: number,
     tweetText: string,
-    replies: {
-        handle: string,
-        profilePic: string,
-        tweetText: string,
-    }[],
+    replies: Reply[],
     isLiked: boolean,
     isRetweeted: boolean,
     uuid: string
