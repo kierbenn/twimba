@@ -6,6 +6,12 @@ import { v4 as uuidv4 } from 'uuid';
 import Tweet from './components/Tweet'
 import './App.css'
 
+type Reply = {
+  handle: string,
+  profilePic: string,
+  tweetText: string,
+}
+
 function App() {
 
   const [tweet, setTweet] = useState('')
@@ -36,6 +42,16 @@ function App() {
     console.log(newTweet)
   }
 
+  const handleAddReply = (tweetId:string, reply:Reply) => {
+    setAllTweets(prev =>
+      prev.map(tweet =>
+        tweet.uuid === tweetId
+          ? { ...tweet, replies: [...tweet.replies, reply] }
+          : tweet
+      )
+    )
+  }
+
   return (
     <>
       <header>
@@ -52,11 +68,13 @@ function App() {
           ></textarea>
         </div>
         <button id="tweet-btn" onClick={submitTweet}>Tweet</button>
-        <div className="feed" id="feed">
-          {allTweets && allTweets.map((tweet: TweetsData, index: number) =>
-            <Tweet key={index} {...tweet} />
-          )}
-        </div>
+        {allTweets && (
+          <div className="feed" id="feed">
+            {allTweets.map((tweet: TweetsData) => (
+              <Tweet key={tweet.uuid} tweet={tweet} onAddReply={handleAddReply} />
+            ))}
+          </div>
+        )}
       </main>
     </>
   )

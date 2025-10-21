@@ -130,3 +130,38 @@ button{
 .hidden{
     display: none;
 }
+
+.input-with-button {
+  position: relative; /* Establish a positioning context for the button */
+  display: inline-flex; /* Align input and button horizontally */
+  align-items: center; /* Vertically center the items */
+  border: 1px solid #ccc; /* Add a border to the whole unit */
+  border-radius: 5px; /* Optional: Rounded corners */
+  overflow: hidden; /* Ensure button doesn't overflow the container */
+  width: 100%;
+}
+
+.input-with-button input {
+  flex-grow: 1; /* Allow input to fill available space */
+  border: none; /* Remove default input border */
+  padding: 8px 10px; /* Adjust padding as needed */
+  outline: none; /* Remove outline on focus */
+}
+
+.input-with-button button {
+  background-color: #1DA1F2; /* Example button background */
+  color: white; /* Example button text color */
+  border: none; /* Remove default button border */
+  padding: 8px 15px; /* Adjust button padding */
+  cursor: pointer;
+  border-radius: 0 5px 5px 0; /* Optional: Rounded corners for button */
+  width: auto;
+}
+
+button:hover {
+  background-color: #0296f1; /* Darker background on hover */
+}
+
+.input-with-button button .fa-regular {
+    color: white;
+}

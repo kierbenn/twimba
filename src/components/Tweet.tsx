@@ -3,12 +3,33 @@ import TweetLiked from "./TweetLiked"
 import TweetShared from "./TweetShared"
 import { useState } from "react"
 
-function Tweet(props: TweetsData) {
+type Reply = {
+  handle: string,
+  profilePic: string,
+  tweetText: string,
+}
+
+function Tweet({tweet, onAddReply}: {tweet: TweetsData, onAddReply:(tweetId:string, reply:Reply) => void}) {
 
     const [isToggled, setIsToggled] = useState(false)
+    const [reply, setReply] = useState('')
+    //const [replyTo, setReplyTo] = useState('')
+
+    //console.log(props, "alltweets")
 
     function handleToggle() {
         setIsToggled(prev => !prev)
+    }
+
+    function handleSubmit() {
+        const newReply = {
+            handle: `@Scrimba 💎`,
+            profilePic: `images/scrimbalogo.png`,
+            tweetText: reply,
+        }
+
+        onAddReply(tweet.uuid, newReply)
+        setReply('')
     }
 
     const hideStyle = !isToggled ? 'hidden' : undefined
@@ -16,26 +37,26 @@ function Tweet(props: TweetsData) {
     return (
         <div className="tweet">
             <div className="tweet-inner">
-                <img src={props.profilePic} className="profile-pic" />
+                <img src={tweet.profilePic} className="profile-pic" />
                 <div>
-                    <p className="handle">{props.handle}</p>
-                    <p className="tweet-text">{props.tweetText}</p>
+                    <p className="handle">{tweet.handle}</p>
+                    <p className="tweet-text">{tweet.tweetText}</p>
                     <div className="tweet-details">
                         <span className="tweet-detail">
                             <i 
-                                className="fa-regular fa-comment-dots" 
+                                className="fa-regular fa-comment-dots"
                                 onClick={handleToggle}
                             ></i>
-                            {props.replies.length}
+                            {tweet.replies.length}
                         </span>
-                        <TweetLiked likes={props.likes} />
-                        <TweetShared retweets={props.retweets} />
+                        <TweetLiked likes={tweet.likes} />
+                        <TweetShared retweets={tweet.retweets} />
                     </div>   
                 </div>            
             </div>
             <div className={hideStyle} id="replies">
-                {props.replies.map(reply =>
-                    <div className="tweet-reply">
+                {tweet.replies.map((reply, index:number) =>
+                    <div key={index} className="tweet-reply">
                         <div className="tweet-inner">
                             <img src={reply.profilePic} className="profile-pic" />
                                 <div>
@@ -45,6 +66,18 @@ function Tweet(props: TweetsData) {
                             </div>
                     </div>
                 )}
+                <div className="tweet-reply">
+                    <div className="input-with-button">
+                        <input 
+                        type="text" 
+                        name="reply" 
+                        value={reply}
+                        onChange={e => setReply(e.target.value)}
+                        placeholder="Tweet your reply"
+                        />
+                        <button onClick={handleSubmit}><i className="fa-regular fa-message"></i></button>
+                    </div>
+                </div>
             </div> 
         </div>
     )
