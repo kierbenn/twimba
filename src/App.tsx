@@ -2,18 +2,38 @@
 import { useState } from 'react'
 import { tweetsData } from './data'
 import type { TweetsData } from './data'
+import { v4 as uuidv4 } from 'uuid';
+import Tweet from './components/Tweet'
 import './App.css'
 
 function App() {
 
   const [tweet, setTweet] = useState('')
+  const [allTweets, setAllTweets] = useState(tweetsData)
 
   function userTweet(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setTweet(e.currentTarget.value)
   }
 
   function submitTweet() {
-    console.log(tweet)
+    
+    if (!tweet) return
+
+    const newTweet = {
+        handle: `@Scrimba 💎`,
+        profilePic: `images/scrimbalogo.png`,
+        likes: 0,
+        retweets: 0,
+        tweetText: tweet,
+        replies: [],
+        isLiked: false,
+        isRetweeted: false,
+        uuid: uuidv4(),
+    }
+
+    setAllTweets(prev => [newTweet, ...prev])
+    setTweet('')
+    console.log(newTweet)
   }
 
   return (
@@ -27,36 +47,15 @@ function App() {
           <textarea
             placeholder="What's happening?"
             id="tweet-input"
+            value={tweet}
             onChange={userTweet}
           ></textarea>
         </div>
         <button id="tweet-btn" onClick={submitTweet}>Tweet</button>
         <div className="feed" id="feed">
-        {tweetsData && tweetsData.map((tweet: TweetsData) =>
-          <div className="tweet">
-              <div className="tweet-inner">
-                  <img src={tweet.profilePic} className="profile-pic" />
-                  <div>
-                      <p className="handle">{tweet.handle}</p>
-                      <p className="tweet-text">{tweet.tweetText}</p>
-                      <div className="tweet-details">
-                          <span className="tweet-detail">
-                              <i className="fa-regular fa-comment-dots" data-reply={tweet.uuid}></i>
-                              {tweet.replies.length}
-                          </span>
-                          <span className="tweet-detail">
-                              <i className="fa-solid fa-heart" data-heart={tweet.uuid}></i>
-                              {tweet.likes}
-                          </span>
-                          <span className="tweet-detail">
-                              <i className="fa-solid fa-retweet" data-retweet={tweet.uuid}></i>
-                              {tweet.retweets}
-                          </span>
-                      </div>   
-                  </div>            
-              </div>
-          </div>
-        )}
+          {allTweets && allTweets.map((tweet: TweetsData, index: number) =>
+            <Tweet key={index} {...tweet} />
+          )}
         </div>
       </main>
     </>
